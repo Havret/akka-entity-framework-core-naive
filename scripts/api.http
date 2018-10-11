@@ -1,0 +1,28 @@
+@api = https://localhost:5001
+@bookId = 22de779f-84c3-4978-a609-359b3f08d239
+
+### Get book
+GET {{api}}/api/books/{{bookId}}
+
+### Get books
+GET {{api}}/api/books
+
+### Create new book
+POST {{api}}/api/books
+content-type: application/json
+
+{
+    "title": "Domain-driven design",
+    "author": "Eric J. Evans",    
+    "cost": 500,
+    "inventoryAmount": 20
+}
+
+### Update book
+PATCH {{api}}/api/books/{{bookId}}
+content-type: application/json
+
+[{ "op": "replace", "path": "/InventoryAmount", "value": 26 }]
+
+### Delete book
+DELETE {{api}}/api/books/{{bookId}}
