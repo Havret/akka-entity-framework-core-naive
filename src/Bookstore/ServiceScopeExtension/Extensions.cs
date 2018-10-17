@@ -11,9 +11,9 @@ namespace Microsoft.Extensions.DependencyInjection
             ServiceScopeExtensionIdProvider.Instance.Get(system).Initialize(serviceScopeFactory);
         }
 
-        public static IServiceScope CreateScope(this ActorSystem system)
+        public static IServiceScope CreateScope(this IActorContext context)
         {
-            return ServiceScopeExtensionIdProvider.Instance.Get(system).CreateScope();
+            return ServiceScopeExtensionIdProvider.Instance.Get(context.System).CreateScope();
         }
     }
 }

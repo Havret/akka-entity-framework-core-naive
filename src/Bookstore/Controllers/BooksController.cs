@@ -36,6 +36,8 @@ namespace Bookstore.Controllers
             {
                 case BookDto book:
                     return Ok(book);
+                case BookNotFound _:
+                    return NotFound();
                 default:
                     return BadRequest();
             }

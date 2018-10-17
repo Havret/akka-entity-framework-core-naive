@@ -13,7 +13,7 @@ namespace Bookstore.Domain
         {
             ReceiveAsync<CreateBook>(async command =>
             {
-                using (IServiceScope serviceScope = Context.System.CreateScope())
+                using (IServiceScope serviceScope = Context.CreateScope())
                 {
                     var bookstoreContext = serviceScope.ServiceProvider.GetService<BookstoreContext>();
                     var newBook = new Book
@@ -32,7 +32,7 @@ namespace Bookstore.Domain
 
             ReceiveAsync<UpdateBook>(async command =>
             {
-                using (IServiceScope serviceScope = Context.System.CreateScope())
+                using (IServiceScope serviceScope = Context.CreateScope())
                 {
                     var bookstoreContext = serviceScope.ServiceProvider.GetService<BookstoreContext>();
                     var book = await bookstoreContext.Books.FindAsync(command.Id);
@@ -46,7 +46,7 @@ namespace Bookstore.Domain
 
             ReceiveAsync<DeleteBook>(async command =>
             {
-                using (IServiceScope serviceScope = Context.System.CreateScope())
+                using (IServiceScope serviceScope = Context.CreateScope())
                 {
                     var bookstoreContext = serviceScope.ServiceProvider.GetService<BookstoreContext>();
                     var book = await bookstoreContext.Books.FindAsync(command.Id);
@@ -60,17 +60,20 @@ namespace Bookstore.Domain
 
             ReceiveAsync<GetBookById>(async query =>
             {
-                using (IServiceScope serviceScope = Context.System.CreateScope())
+                using (IServiceScope serviceScope = Context.CreateScope())
                 {
                     var bookstoreContext = serviceScope.ServiceProvider.GetService<BookstoreContext>();
                     var book = await bookstoreContext.Books.FindAsync(query.Id);
-                    Sender.Tell(Mappings.Map(book));
+                    if (book != null)
+                        Sender.Tell(Mappings.Map(book));
+                    else
+                        Sender.Tell(BookNotFound.Instance);
                 }
             });
 
             ReceiveAsync<GetBooks>(async query =>
             {
-                using (IServiceScope serviceScope = Context.System.CreateScope())
+                using (IServiceScope serviceScope = Context.CreateScope())
                 {
                     var bookstoreContext = serviceScope.ServiceProvider.GetService<BookstoreContext>();
                     var books = await bookstoreContext.Books.Select(book => Mappings.Map(book)).ToListAsync();
